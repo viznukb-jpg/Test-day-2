@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
 import Logo from "./Logo";
+import { useAuth } from "@/features/auth/AuthContext";
+import { auth } from "@/lib/firebase";
+import { signOut } from "firebase/auth";
 
 const styles = {
   header:
@@ -16,33 +21,50 @@ const styles = {
     "text-2xl font-medium text-gray-600 hover:text-indigo-600 transition-colors",
   signupLink:
     "text-2xl font-semibold px-8 py-4 rounded-full bg-gray-900 text-white hover:bg-indigo-600 hover:shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-0.5 transition-all duration-300",
+  logoutButton: "text-2xl font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 px-6 py-3 rounded-xl transition-colors",
 };
 
 export default function Header() {
+  const { user, loading } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+  };
+
   return (
     <header className={styles.header}>
       <nav className={styles.nav}>
         <div className={styles.leftSection}>
           <Logo />
-          <div className={styles.linksWrapper}>
-            <Link href="/rooms" className={styles.navLink}>
-              Rooms
-              <span className={styles.navLinkUnderline}></span>
-            </Link>
-            <Link href="/bookings" className={styles.navLink}>
-              Bookings
-              <span className={styles.navLinkUnderline}></span>
-            </Link>
-          </div>
+          {!loading && user && (
+            <div className={styles.linksWrapper}>
+              <Link href="/rooms" className={styles.navLink}>
+                Rooms
+                <span className={styles.navLinkUnderline}></span>
+              </Link>
+              <Link href="/bookings" className={styles.navLink}>
+                Bookings
+                <span className={styles.navLinkUnderline}></span>
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className={styles.rightSection}>
-          <Link href="/login" className={styles.loginLink}>
-            Log in
-          </Link>
-          <Link href="/register" className={styles.signupLink}>
-            Sign up
-          </Link>
+          {!loading && user ? (
+            <button onClick={handleLogout} className={styles.logoutButton}>
+              Logout
+            </button>
+          ) : (
+            <>
+              <Link href="/login" className={styles.loginLink}>
+                Log in
+              </Link>
+              <Link href="/register" className={styles.signupLink}>
+                Sign up
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>

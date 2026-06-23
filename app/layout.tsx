@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
+import { AuthProvider } from "@/features/auth/AuthContext";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,8 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex min-h-full flex-col">
-        <Header />
-        <main className="mx-auto w-full max-w-5xl flex-1 p-4">{children}</main>
+        <AuthProvider>
+          <Header />
+          <main className="mx-auto w-full max-w-5xl flex-1 p-4">
+            {children}
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );
