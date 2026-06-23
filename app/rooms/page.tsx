@@ -1,22 +1,96 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
+import { CreateRoomModal } from "@/features/rooms/components/CreateRoomModal";
+import { getUserRooms, deleteRoom } from "@/features/rooms/roomService";
+import { Room } from "@/features/rooms/types";
+
+import { Spinner } from "@/components/ui/Spinner";
+import { RoomsHeader } from "@/features/rooms/components/RoomsHeader";
+import { RoomsEmptyState } from "@/features/rooms/components/RoomsEmptyState";
+import { RoomCard } from "@/features/rooms/components/RoomCard";
+import { DeleteRoomModal } from "@/features/rooms/components/DeleteRoomModal";
 
 export default function RoomsPage() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [isLoadingRooms, setIsLoadingRooms] = useState(true);
+  
+  const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  if (loading || !user) {
-    return (
-      <div className="flex justify-center py-20">
-        <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-      </div>
-    );
+  useEffect(() => {
+    const fetchRooms = async () => {
+      if (!user?.email) return;
+      try {
+        const data = await getUserRooms(user.email);
+        setRooms(data);
+      } catch (err) {
+        console.error("Failed to fetch rooms:", err);
+      } finally {
+        setIsLoadingRooms(false);
+      }
+    };
+
+    if (user?.email) {
+      fetchRooms();
+    }
+  }, [user]);
+
+  const handleDeleteConfirm = async () => {
+    if (!roomToDelete?.id) return;
+    setIsDeleting(true);
+    try {
+      await deleteRoom(roomToDelete.id);
+      setRooms((prev) => prev.filter((r) => r.id !== roomToDelete.id));
+      setRoomToDelete(null);
+    } catch (error) {
+      console.error("Failed to delete room:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  if (authLoading || !user) {
+    return <Spinner size="lg" className="py-24" />;
   }
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-8">Meeting Rooms</h1>
-      <p>This is a protected page. You are logged in as {user.email}.</p>
+    <div className="pb-20">
+      <RoomsHeader onCreateClick={() => setIsModalOpen(true)} />
+
+      {isLoadingRooms ? (
+        <Spinner size="lg" className="py-24" />
+      ) : rooms.length === 0 ? (
+        <RoomsEmptyState onCreateClick={() => setIsModalOpen(true)} />
+      ) : (
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {rooms.map((room) => (
+            <RoomCard 
+              key={room.id} 
+              room={room} 
+              userEmail={user.email} 
+              onDeleteClick={(r) => setRoomToDelete(r)}
+            />
+          ))}
+        </div>
+      )}
+
+      <CreateRoomModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={(newRoom) => setRooms((prev) => [newRoom, ...prev])}
+      />
+
+      <DeleteRoomModal
+        isOpen={!!roomToDelete}
+        onClose={() => setRoomToDelete(null)}
+        onConfirm={handleDeleteConfirm}
+        isDeleting={isDeleting}
+        roomName={roomToDelete?.name || ""}
+      />
     </div>
   );
 }

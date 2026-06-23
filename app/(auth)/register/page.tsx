@@ -6,6 +6,8 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { authStyles as styles } from "@/features/auth/styles";
+import { formStyles } from "@/components/ui/formStyles";
+import { setSessionCookie } from "@/features/auth/actions";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -86,7 +88,7 @@ export default function RegisterPage() {
             {...register("password")}
           />
 
-          <button type="submit" disabled={isSubmitting} className={styles.button}>
+          <button type="submit" disabled={isSubmitting} className={formStyles.button}>
             {isSubmitting ? "Signing up..." : "Sign up"}
           </button>
         </form>

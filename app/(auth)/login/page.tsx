@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { authStyles as styles } from "@/features/auth/styles";
+import { formStyles } from "@/components/ui/formStyles";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,9 +31,15 @@ export default function LoginPage() {
       router.push("/rooms");
     } catch (err: any) {
       console.error("Login failed", err);
-      if (err.code === "auth/user-not-found" || err.code === "auth/invalid-email") {
+      if (
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/invalid-email"
+      ) {
         setFirebaseError("Користувача з такою поштою не знайдено!");
-      } else if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+      } else if (
+        err.code === "auth/wrong-password" ||
+        err.code === "auth/invalid-credential"
+      ) {
         setFirebaseError("Невірний пароль або пошта. Перевірте введені дані.");
       } else {
         setFirebaseError("Помилка входу. Будь ласка, спробуйте ще раз.");
@@ -47,7 +54,7 @@ export default function LoginPage() {
         <p className={styles.subtitle}>Sign in to manage your bookings</p>
 
         {firebaseError && (
-          <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-lg text-center">
+          <div className="mb-6 rounded-xl border border-red-100 bg-red-50 p-4 text-center text-lg text-red-600">
             {firebaseError}
           </div>
         )}
@@ -65,7 +72,7 @@ export default function LoginPage() {
           <div className="relative">
             <Link
               href="#"
-              className="absolute right-0 top-0 text-lg font-medium text-indigo-600 hover:text-indigo-500 transition-colors"
+              className="absolute top-0 right-0 text-lg font-medium text-indigo-600 transition-colors hover:text-indigo-500"
             >
               Forgot password?
             </Link>
@@ -79,7 +86,11 @@ export default function LoginPage() {
             />
           </div>
 
-          <button type="submit" disabled={isSubmitting} className={styles.button}>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={formStyles.button}
+          >
             {isSubmitting ? "Signing in..." : "Sign in"}
           </button>
         </form>
