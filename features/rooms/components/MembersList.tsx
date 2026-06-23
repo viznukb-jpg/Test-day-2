@@ -32,7 +32,7 @@ export function MembersList({ room, canManage, onUpdated }: MembersListProps) {
     try {
       const userDocRef = doc(db, "users", emailLower);
       const userDocSnap = await getDoc(userDocRef);
-      
+
       if (!userDocSnap.exists()) {
         toast.error("This user is not registered in the app");
         setIsAdding(false);
@@ -118,7 +118,7 @@ export function MembersList({ room, canManage, onUpdated }: MembersListProps) {
             className="flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
           >
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 text-xl font-bold text-indigo-700">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-linear-to-br from-indigo-100 to-purple-100 text-xl font-bold text-indigo-700">
                 {email.charAt(0).toUpperCase()}
               </div>
               <div>

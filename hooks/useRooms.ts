@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { db } from "@/lib/firebase";
-import { collection, query, where, FieldPath, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  FieldPath,
+  onSnapshot,
+} from "firebase/firestore";
 import { Room } from "@/features/rooms/types";
 
 const ROOMS_COLLECTION = "rooms";
@@ -21,11 +27,17 @@ export const useRooms = (userEmail?: string | null) => {
   useEffect(() => {
     let isMounted = true;
     if (!userEmail) {
-      return () => { isMounted = false; };
+      return () => {
+        isMounted = false;
+      };
     }
     const q = query(
       collection(db, ROOMS_COLLECTION),
-      where(new FieldPath("members", userEmail), "in", ["owner", "admin", "user"])
+      where(new FieldPath("members", userEmail), "in", [
+        "owner",
+        "admin",
+        "user",
+      ]),
     );
 
     const unsubscribe = onSnapshot(
@@ -42,7 +54,7 @@ export const useRooms = (userEmail?: string | null) => {
         console.error("Error fetching rooms:", err);
         setError(err);
         setLoading(false);
-      }
+      },
     );
 
     return () => {

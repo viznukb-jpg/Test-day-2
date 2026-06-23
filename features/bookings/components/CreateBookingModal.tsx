@@ -1,7 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { createBooking, isRoomAvailable } from "@/features/bookings/bookingsService";
+import {
+  createBooking,
+  isRoomAvailable,
+} from "@/features/bookings/bookingsService";
 import toast from "react-hot-toast";
 import BookingForm from "./BookingForm";
 import { BookingFormValues } from "../validations";
@@ -26,7 +29,12 @@ export default function CreateBookingModal({
   const handleSubmit = async (data: BookingFormValues) => {
     setIsSubmitting(true);
     try {
-      const { available, conflictTime } = await isRoomAvailable(data.roomId, data.date, data.startTime, data.endTime);
+      const { available, conflictTime } = await isRoomAvailable(
+        data.roomId,
+        data.date,
+        data.startTime,
+        data.endTime,
+      );
       if (!available) {
         toast.error(`Room is occupied during this time (${conflictTime})`);
         setIsSubmitting(false);
@@ -57,9 +65,12 @@ export default function CreateBookingModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-1000 flex items-center justify-center bg-black/40"
+      onClick={onClose}
+    >
       <div
-        className="w-full max-w-4xl max-h-[95vh] overflow-y-auto rounded-3xl bg-white/90 p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
+        className="max-h-[95vh] w-full max-w-4xl overflow-y-auto rounded-3xl bg-white/90 p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-8 text-5xl font-extrabold text-gray-900">

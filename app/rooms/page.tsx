@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
 import { CreateRoomModal } from "@/features/rooms/components/CreateRoomModal";
 import { deleteRoom } from "@/features/rooms/roomService";
@@ -39,14 +39,14 @@ export default function RoomsPage() {
   }
 
   return (
-    <main className="px-6 py-12 max-w-7xl mx-auto pb-20">
+    <main className="mx-auto max-w-7xl px-6 py-12 pb-20">
       <PageHeader
         title="Meeting Rooms"
         description="Manage your workspaces and meeting areas."
         actionButton={
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-3 bg-gray-900 hover:bg-indigo-600 text-white px-8 py-4 rounded-full text-xl font-semibold transition-all hover:shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-0.5"
+            className="flex items-center gap-3 rounded-full bg-gray-900 px-8 py-4 text-xl font-semibold text-white transition-all hover:-translate-y-0.5 hover:bg-indigo-600 hover:shadow-xl hover:shadow-indigo-500/20"
           >
             <Plus size={24} />
             Create Room

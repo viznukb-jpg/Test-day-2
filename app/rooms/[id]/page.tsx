@@ -98,7 +98,7 @@ export default function RoomPage() {
             <EditRoomForm room={room} onUpdated={() => {}} />
           </div>
         ) : (
-          <div className="flex h-full min-h-[300px] flex-col items-center justify-center rounded-[2.5rem] border border-indigo-50 bg-white/70 p-10 text-center shadow-xl shadow-indigo-100/20 backdrop-blur-xl">
+          <div className="flex h-full min-h-75 flex-col items-center justify-center rounded-[2.5rem] border border-indigo-50 bg-white/70 p-10 text-center shadow-xl shadow-indigo-100/20 backdrop-blur-xl">
             <h3 className="mb-4 text-2xl font-bold text-gray-900">
               About this room
             </h3>

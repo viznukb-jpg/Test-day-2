@@ -28,9 +28,9 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
   return (
     <div
       onClick={handleCardClick}
-      className="group relative flex min-h-[280px] cursor-pointer flex-col items-center overflow-hidden rounded-[2.5rem] border border-indigo-50 bg-white p-10 text-center shadow-2xl shadow-indigo-200/50 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-indigo-200 hover:shadow-[0_35px_60px_-15px_rgba(79,70,229,0.4)]"
+      className="group relative flex min-h-70 cursor-pointer flex-col items-center overflow-hidden rounded-[2.5rem] border border-indigo-50 bg-white p-10 text-center shadow-2xl shadow-indigo-200/50 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-indigo-200 hover:shadow-[0_35px_60px_-15px_rgba(79,70,229,0.4)]"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-50/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-indigo-50/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
 
       <div className="relative z-10 flex h-full w-full flex-col items-center pt-4">
         <h3 className="mb-5 text-4xl font-extrabold text-gray-900 transition-colors group-hover:text-indigo-600">
@@ -54,7 +54,7 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
         )}
 
         <div className="mt-auto flex w-full flex-col items-center gap-4 border-t border-gray-100/80 pt-8">
-          <span className="rounded-full border border-indigo-100/50 bg-gradient-to-r from-indigo-50 to-purple-50 px-8 py-3 text-base font-bold tracking-widest text-indigo-700 uppercase shadow-sm">
+          <span className="rounded-full border border-indigo-100/50 bg-linear-to-r from-indigo-50 to-purple-50 px-8 py-3 text-base font-bold tracking-widest text-indigo-700 uppercase shadow-sm">
             {role}
           </span>
           <span className="text-base font-medium text-gray-400">

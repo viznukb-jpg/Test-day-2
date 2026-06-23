@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/features/auth/AuthContext";
 import {
@@ -153,15 +153,15 @@ export default function BookingDetailsPage() {
           </div>
         )}
 
-        <AttendeesList 
-          attendees={booking.attendees || []} 
-          roomMembers={room.members} 
+        <AttendeesList
+          attendees={booking.attendees || []}
+          roomMembers={room.members}
         />
 
-        <DeclinedList 
-          declinedEmails={booking.declinedBy || []} 
-          canManage={canManage} 
-          onReinvite={handleReinvite} 
+        <DeclinedList
+          declinedEmails={booking.declinedBy || []}
+          canManage={canManage}
+          onReinvite={handleReinvite}
         />
       </div>
 
