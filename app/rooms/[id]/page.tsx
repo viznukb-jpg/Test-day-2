@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useAuth } from "@/features/auth/AuthContext";
 import { deleteRoom } from "@/features/rooms/roomService";
 import { Spinner } from "@/components/ui/Spinner";
@@ -12,6 +12,7 @@ import { MembersList } from "@/features/rooms/components/MembersList";
 import { DeleteRoomModal } from "@/features/rooms/components/DeleteRoomModal";
 import toast from "react-hot-toast";
 import { useRoom } from "@/hooks/useRoom";
+import { BackLink } from "@/components/ui/BackLink";
 
 export default function RoomPage() {
   const params = useParams();
@@ -70,13 +71,7 @@ export default function RoomPage() {
 
   return (
     <div className="pb-20">
-      <Link
-        href="/rooms"
-        className="mb-10 inline-flex items-center gap-3 text-2xl font-semibold text-gray-500 transition-colors hover:text-indigo-600"
-      >
-        <ArrowLeft size={28} />
-        Back to Rooms
-      </Link>
+      <BackLink href="/rooms" label="Back to Rooms" />
 
       <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-start">
         <div>

@@ -12,8 +12,9 @@ import { useBooking } from "@/hooks/useBooking";
 import EditBookingModal from "@/features/bookings/components/EditBookingModal";
 import AttendeesList from "@/features/bookings/components/AttendeesList";
 import DeclinedList from "@/features/bookings/components/DeclinedList";
+import { BackLink } from "@/components/ui/BackLink";
 import toast from "react-hot-toast";
-import { Pencil, Trash2, ArrowLeft } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 export default function BookingDetailsPage() {
   const { id } = useParams();
@@ -100,12 +101,7 @@ export default function BookingDetailsPage() {
 
   return (
     <main className="mx-auto max-w-7xl px-6 py-12">
-      <button
-        onClick={() => router.push("/bookings")}
-        className="mb-8 flex items-center gap-2 text-lg font-medium text-gray-500 transition-colors hover:text-indigo-600"
-      >
-        <ArrowLeft size={20} /> Back to Bookings
-      </button>
+      <BackLink href="/bookings" label="Back to Bookings" />
 
       <div className="relative rounded-[3rem] border border-gray-100 bg-white p-10 shadow-sm md:p-16">
         {canManage && (

@@ -7,7 +7,7 @@ import { createRoomSchema, CreateRoomFormValues } from "../validations";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import { formStyles } from "@/components/ui/formStyles";
+import { Button } from "@/components/ui/Button";
 import { createRoom } from "../roomService";
 import { useAuth } from "@/features/auth/AuthContext";
 
@@ -84,13 +84,9 @@ export function CreateRoomModal({
           {...register("description")}
         />
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={formStyles.button}
-        >
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Creating..." : "Create Room"}
-        </button>
+        </Button>
       </form>
     </Modal>
   );

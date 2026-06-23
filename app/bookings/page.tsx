@@ -7,6 +7,7 @@ import { useBookings } from "@/hooks/useBookings";
 import BookingCard from "@/features/bookings/components/BookingCard";
 import CreateBookingModal from "@/features/bookings/components/CreateBookingModal";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { Spinner } from "@/components/ui/Spinner";
 
 export default function BookingsPage() {
   const { user, loading: authLoading } = useAuth();
@@ -17,14 +18,8 @@ export default function BookingsPage() {
 
   const isLoading = isLoadingRooms || isLoadingBookings;
 
-  if (authLoading || isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50/30">
-        <div className="animate-pulse text-xl font-bold text-indigo-600">
-          Loading...
-        </div>
-      </div>
-    );
+  if (authLoading || !user) {
+    return <Spinner size="lg" className="py-24" />;
   }
 
   // User can only create bookings for rooms they own or admin
@@ -61,7 +56,9 @@ export default function BookingsPage() {
         }
       />
 
-      {bookings.length === 0 ? (
+      {isLoading ? (
+        <Spinner size="lg" className="py-24" />
+      ) : bookings.length === 0 ? (
         <div className="py-20 text-center">
           <p className="mb-4 text-4xl font-bold text-gray-400">
             No bookings yet.
@@ -88,7 +85,6 @@ export default function BookingsPage() {
                       currentUserEmail={user?.email || ""}
                       userRole={userRole}
                       roomName={roomName}
-                      onBookingUpdated={() => {}}
                     />
                   );
                 })}
@@ -115,7 +111,6 @@ export default function BookingsPage() {
                       currentUserEmail={user?.email || ""}
                       userRole={userRole}
                       roomName={roomName}
-                      onBookingUpdated={() => {}}
                     />
                   );
                 })}

@@ -59,9 +59,9 @@ export default function EditBookingModal({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/40" onClick={onClose}>
       <div
-        className="modal-content w-full max-w-4xl p-12 max-h-[95vh] overflow-y-auto"
+        className="w-full max-w-4xl max-h-[95vh] overflow-y-auto rounded-3xl bg-white/90 p-12 shadow-[0_8px_32px_rgba(0,0,0,0.2)]"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="mb-8 text-5xl font-extrabold text-gray-900">

@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import { authStyles as styles } from "@/features/auth/styles";
-import { formStyles } from "@/components/ui/formStyles";
-
 import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import { AuthCard } from "@/features/auth/components/AuthCard";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -41,6 +41,12 @@ export default function RegisterPage() {
         displayName: data.name,
       });
 
+      await setDoc(doc(db, "users", data.email.toLowerCase()), {
+        email: data.email.toLowerCase(),
+        name: data.name,
+        createdAt: new Date().toISOString(),
+      });
+
       router.push("/rooms");
     } catch (err: unknown) {
       const firebaseErr = err as { code?: string };
@@ -57,61 +63,56 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <h2 className={styles.title}>Create an account</h2>
-        <p className={styles.subtitle}>Join us to book your meeting spaces</p>
-
-        {firebaseError && (
-          <div className="mb-6 rounded-xl border border-red-100 bg-red-50 p-4 text-center text-lg text-red-600">
-            {firebaseError}
-          </div>
-        )}
-
-        <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            id="name"
-            type="text"
-            label="Full Name"
-            placeholder="John Doe"
-            error={errors.name?.message}
-            {...register("name")}
-          />
-
-          <Input
-            id="email"
-            type="email"
-            label="Email address"
-            placeholder="you@company.com"
-            error={errors.email?.message}
-            {...register("email")}
-          />
-
-          <Input
-            id="password"
-            type="password"
-            label="Password"
-            placeholder="••••••••"
-            error={errors.password?.message}
-            {...register("password")}
-          />
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={formStyles.button}
-          >
-            {isSubmitting ? "Signing up..." : "Sign up"}
-          </button>
-        </form>
-
-        <p className={styles.footerText}>
+    <AuthCard
+      title="Create an account"
+      subtitle="Join us to book your meeting spaces"
+      footer={
+        <>
           Already have an account?{" "}
-          <Link href="/login" className={styles.link}>
+          <Link href="/login" className="font-semibold text-indigo-600 hover:text-indigo-500 hover:underline transition-colors">
             Sign in
           </Link>
-        </p>
-      </div>
-    </div>
+        </>
+      }
+    >
+      {firebaseError && (
+        <div className="mb-6 rounded-xl border border-red-100 bg-red-50 p-4 text-center text-lg text-red-600">
+          {firebaseError}
+        </div>
+      )}
+
+      <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+        <Input
+          id="name"
+          type="text"
+          label="Full Name"
+          placeholder="John Doe"
+          error={errors.name?.message}
+          {...register("name")}
+        />
+
+        <Input
+          id="email"
+          type="email"
+          label="Email address"
+          placeholder="you@company.com"
+          error={errors.email?.message}
+          {...register("email")}
+        />
+
+        <Input
+          id="password"
+          type="password"
+          label="Password"
+          placeholder="••••••••"
+          error={errors.password?.message}
+          {...register("password")}
+        />
+
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Signing up..." : "Sign up"}
+        </Button>
+      </form>
+    </AuthCard>
   );
 }

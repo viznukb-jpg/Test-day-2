@@ -18,7 +18,7 @@ export const bookingSchema = z
     },
     {
       message: "End time must be after start time",
-      path: ["endTime"], // the error will be attached to endTime
+      path: ["endTime"],
     },
   );
 

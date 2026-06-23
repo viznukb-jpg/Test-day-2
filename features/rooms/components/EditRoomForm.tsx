@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "@/features/auth/AuthContext";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import { formStyles } from "@/components/ui/formStyles";
+import { Button } from "@/components/ui/Button";
 import { Room } from "../types";
 import { updateRoom } from "../roomService";
 
@@ -51,13 +51,13 @@ export function EditRoomForm({ room, onUpdated }: EditRoomFormProps) {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button
+        <Button
           type="submit"
+          className="mt-4 disabled:opacity-50 disabled:hover:translate-y-0"
           disabled={isSaving || !name.trim() || (name === room.name && description === (room.description || ""))}
-          className={`${formStyles.button} mt-4 disabled:opacity-50 disabled:hover:translate-y-0`}
         >
           {isSaving ? "Saving..." : "Save Changes"}
-        </button>
+        </Button>
       </form>
     </div>
   );

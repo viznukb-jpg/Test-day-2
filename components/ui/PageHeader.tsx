@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;
@@ -6,23 +6,21 @@ interface PageHeaderProps {
   actionButton?: ReactNode;
 }
 
-export function PageHeader({ title, description, actionButton }: PageHeaderProps) {
+export function PageHeader({
+  title,
+  description,
+  actionButton,
+}: PageHeaderProps) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
+    <div className="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-center">
       <div>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3">
+        <h1 className="mb-3 text-4xl font-extrabold tracking-tight text-gray-900 md:text-5xl">
           {title}
         </h1>
-        <p className="text-lg md:text-xl text-gray-500">
-          {description}
-        </p>
+        <p className="text-lg text-gray-500 md:text-xl">{description}</p>
       </div>
-      
-      {actionButton && (
-        <div>
-          {actionButton}
-        </div>
-      )}
+
+      {actionButton && <div>{actionButton}</div>}
     </div>
   );
 }

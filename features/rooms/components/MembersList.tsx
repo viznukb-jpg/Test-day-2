@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Room } from "../types";
 import { updateRoom } from "../roomService";
 import { Input } from "@/components/ui/Input";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { UserPlus, Shield, User } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "@/features/auth/AuthContext";
@@ -28,6 +30,15 @@ export function MembersList({ room, canManage, onUpdated }: MembersListProps) {
     }
     setIsAdding(true);
     try {
+      const userDocRef = doc(db, "users", emailLower);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      if (!userDocSnap.exists()) {
+        toast.error("This user is not registered in the app");
+        setIsAdding(false);
+        return;
+      }
+
       const updatedMembers = { ...room.members, [emailLower]: newRole };
       await updateRoom(room.id, { members: updatedMembers });
       onUpdated({ ...room, members: updatedMembers });

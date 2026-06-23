@@ -14,13 +14,6 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
   const role = userEmail ? room.members[userEmail] : "";
   const canManage = role === "owner" || role === "admin";
 
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (room.id) {
-      router.push(`/rooms/${room.id}`);
-    }
-  };
-
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDeleteClick(room);
@@ -35,7 +28,7 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
   return (
     <div
       onClick={handleCardClick}
-      className="group relative flex min-h-[280px] cursor-pointer flex-col items-center overflow-hidden rounded-[2.5rem] border border-indigo-50 bg-white p-10 text-center shadow-xl shadow-indigo-100/30 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/20"
+      className="group relative flex min-h-[280px] cursor-pointer flex-col items-center overflow-hidden rounded-[2.5rem] border border-indigo-50 bg-white p-10 text-center shadow-2xl shadow-indigo-200/50 backdrop-blur-xl transition-all duration-300 hover:-translate-y-2 hover:border-indigo-200 hover:shadow-[0_35px_60px_-15px_rgba(79,70,229,0.4)]"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-50/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
 
@@ -44,7 +37,7 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
           {room.name}
         </h3>
 
-        <p className="mb-6 line-clamp-3 flex-grow px-4 text-xl leading-relaxed text-gray-500">
+        <p className="mb-6 line-clamp-3 grow px-4 text-xl leading-relaxed text-gray-500">
           {room.description || "No description provided."}
         </p>
 
