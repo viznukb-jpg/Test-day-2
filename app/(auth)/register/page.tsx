@@ -7,7 +7,7 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { authStyles as styles } from "@/features/auth/styles";
 import { formStyles } from "@/components/ui/formStyles";
-import { setSessionCookie } from "@/features/auth/actions";
+
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

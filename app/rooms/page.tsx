@@ -7,7 +7,8 @@ import { getUserRooms, deleteRoom } from "@/features/rooms/roomService";
 import { Room } from "@/features/rooms/types";
 
 import { Spinner } from "@/components/ui/Spinner";
-import { RoomsHeader } from "@/features/rooms/components/RoomsHeader";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Plus } from "lucide-react";
 import { RoomsEmptyState } from "@/features/rooms/components/RoomsEmptyState";
 import { RoomCard } from "@/features/rooms/components/RoomCard";
 import { DeleteRoomModal } from "@/features/rooms/components/DeleteRoomModal";
@@ -22,20 +23,27 @@ export default function RoomsPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const fetchRooms = async () => {
+    let isMounted = true;
+    const fetchRooms = async (showLoading = false) => {
       if (!user?.email) return;
+      if (showLoading) setIsLoadingRooms(true);
       try {
         const data = await getUserRooms(user.email);
-        setRooms(data);
+        if (isMounted) setRooms(data);
       } catch (err) {
         console.error("Failed to fetch rooms:", err);
       } finally {
-        setIsLoadingRooms(false);
+        if (isMounted && showLoading) setIsLoadingRooms(false);
       }
     };
 
     if (user?.email) {
-      fetchRooms();
+      fetchRooms(true);
+      const intervalId = setInterval(() => fetchRooms(false), 5000);
+      return () => {
+        isMounted = false;
+        clearInterval(intervalId);
+      };
     }
   }, [user]);
 
@@ -58,8 +66,20 @@ export default function RoomsPage() {
   }
 
   return (
-    <div className="pb-20">
-      <RoomsHeader onCreateClick={() => setIsModalOpen(true)} />
+    <main className="px-6 py-12 max-w-7xl mx-auto pb-20">
+      <PageHeader
+        title="Meeting Rooms"
+        description="Manage your workspaces and meeting areas."
+        actionButton={
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-3 bg-gray-900 hover:bg-indigo-600 text-white px-8 py-4 rounded-full text-xl font-semibold transition-all hover:shadow-xl hover:shadow-indigo-500/20 hover:-translate-y-0.5"
+          >
+            <Plus size={24} />
+            Create Room
+          </button>
+        }
+      />
 
       {isLoadingRooms ? (
         <Spinner size="lg" className="py-24" />
@@ -91,6 +111,6 @@ export default function RoomsPage() {
         isDeleting={isDeleting}
         roomName={roomToDelete?.name || ""}
       />
-    </div>
+    </main>
   );
 }

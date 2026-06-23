@@ -51,7 +51,7 @@ export function CreateRoomModal({
       );
       reset();
       onSuccess(newRoom as Room);
-      toast.success('Room created successfully', { action: { label: '✖', onClick: (t) => toast.dismiss(t.id) } });
+      toast.success('Room created successfully');
       onClose();
     } catch (err: any) {
       console.error("Failed to create room:", err);

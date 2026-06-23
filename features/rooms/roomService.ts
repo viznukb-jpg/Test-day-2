@@ -14,7 +14,7 @@ export const createRoom = async (
     description,
     ownerEmail: userEmail,
     members: {
-      [userEmail]: "admin",
+      [userEmail]: "owner",
     },
     createdAt: new Date().toISOString(),
   };
