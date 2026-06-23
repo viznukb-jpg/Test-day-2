@@ -21,7 +21,12 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
           <main className="mx-auto w-full max-w-5xl flex-1 p-4">
-            <Toaster position="top-center" toastOptions={{ style: { fontSize: "1.4rem" }, closeButton: true }} />
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                style: { fontSize: "1.4rem" },
+              }}
+            />
             {children}
           </main>
         </AuthProvider>
