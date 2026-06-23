@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
+
 import { AuthProvider } from "@/features/auth/AuthContext";
 import "./globals.css";
 
@@ -19,6 +21,7 @@ export default function RootLayout({
         <AuthProvider>
           <Header />
           <main className="mx-auto w-full max-w-5xl flex-1 p-4">
+            <Toaster position="top-center" toastOptions={{ style: { fontSize: "1.4rem" }, closeButton: true }} />
             {children}
           </main>
         </AuthProvider>

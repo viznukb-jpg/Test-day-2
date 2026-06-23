@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { collection, addDoc, getDocs, query, where, FieldPath, doc, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, query, where, FieldPath, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { Room } from "./types";
 
 const ROOMS_COLLECTION = "rooms";
@@ -14,7 +14,7 @@ export const createRoom = async (
     description,
     ownerEmail: userEmail,
     members: {
-      [userEmail]: "owner",
+      [userEmail]: "admin",
     },
     createdAt: new Date().toISOString(),
   };
@@ -40,4 +40,18 @@ export const getUserRooms = async (userEmail: string) => {
 export const deleteRoom = async (roomId: string) => {
   const roomRef = doc(db, ROOMS_COLLECTION, roomId);
   await deleteDoc(roomRef);
+};
+
+export const getRoomById = async (roomId: string): Promise<Room | null> => {
+  const roomRef = doc(db, ROOMS_COLLECTION, roomId);
+  const roomSnap = await getDoc(roomRef);
+  if (roomSnap.exists()) {
+    return { id: roomSnap.id, ...roomSnap.data() } as Room;
+  }
+  return null;
+};
+
+export const updateRoom = async (roomId: string, data: Partial<Room>) => {
+  const roomRef = doc(db, ROOMS_COLLECTION, roomId);
+  await updateDoc(roomRef, data);
 };

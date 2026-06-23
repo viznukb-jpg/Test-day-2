@@ -17,7 +17,7 @@ export default function RoomsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [isLoadingRooms, setIsLoadingRooms] = useState(true);
-  
+
   const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -68,10 +68,10 @@ export default function RoomsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {rooms.map((room) => (
-            <RoomCard 
-              key={room.id} 
-              room={room} 
-              userEmail={user.email} 
+            <RoomCard
+              key={room.id}
+              room={room}
+              userEmail={user.email}
               onDeleteClick={(r) => setRoomToDelete(r)}
             />
           ))}

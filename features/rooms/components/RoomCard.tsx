@@ -1,6 +1,6 @@
 import React from "react";
 import { Room } from "../types";
-import { Pencil, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface RoomCardProps {
@@ -11,8 +11,7 @@ interface RoomCardProps {
 
 export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
   const router = useRouter();
-  // Use a fallback to prevent TS error when userEmail is null (ts 2538)
-  const role = userEmail ? room.members[userEmail] : "guest";
+  const role = userEmail ? room.members[userEmail] : "";
   const canManage = role === "owner" || role === "admin";
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -27,31 +26,33 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
     onDeleteClick(room);
   };
 
-  return (
-    <div className="bg-white backdrop-blur-xl border border-indigo-50 rounded-[2.5rem] p-10 shadow-xl shadow-indigo-100/30 hover:shadow-2xl hover:shadow-indigo-500/20 hover:border-indigo-200 hover:-translate-y-1.5 transition-all duration-300 group cursor-pointer relative overflow-hidden flex flex-col items-center text-center min-h-[280px]">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+  const handleCardClick = () => {
+    if (room.id) {
+      router.push(`/rooms/${room.id}`);
+    }
+  };
 
-      <div className="relative z-10 flex flex-col items-center h-full w-full pt-4">
-        <h3 className="text-4xl font-extrabold text-gray-900 mb-5 group-hover:text-indigo-600 transition-colors">
+  return (
+    <div
+      onClick={handleCardClick}
+      className="group relative flex min-h-[280px] cursor-pointer flex-col items-center overflow-hidden rounded-[2.5rem] border border-indigo-50 bg-white p-10 text-center shadow-xl shadow-indigo-100/30 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1.5 hover:border-indigo-200 hover:shadow-2xl hover:shadow-indigo-500/20"
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-indigo-50/50 opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
+
+      <div className="relative z-10 flex h-full w-full flex-col items-center pt-4">
+        <h3 className="mb-5 text-4xl font-extrabold text-gray-900 transition-colors group-hover:text-indigo-600">
           {room.name}
         </h3>
 
-        <p className="text-gray-500 text-xl mb-6 line-clamp-3 flex-grow leading-relaxed px-4">
+        <p className="mb-6 line-clamp-3 flex-grow px-4 text-xl leading-relaxed text-gray-500">
           {room.description || "No description provided."}
         </p>
 
         {canManage && (
-          <div className="flex items-center justify-center gap-4 mb-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <button
-              onClick={handleEditClick}
-              className="p-3.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-500 hover:text-indigo-700 rounded-2xl shadow-sm hover:shadow-md transition-all hover:scale-110"
-              title="Edit room"
-            >
-              <Pencil size={22} />
-            </button>
+          <div className="mb-6 flex translate-y-2 transform items-center justify-center gap-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <button
               onClick={handleDeleteClick}
-              className="p-3.5 bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-700 rounded-2xl shadow-sm hover:shadow-md transition-all hover:scale-110"
+              className="rounded-2xl bg-red-50 p-3.5 text-red-500 shadow-sm transition-all hover:scale-110 hover:bg-red-100 hover:text-red-700 hover:shadow-md"
               title="Delete room"
             >
               <Trash2 size={22} />
@@ -59,11 +60,11 @@ export function RoomCard({ room, userEmail, onDeleteClick }: RoomCardProps) {
           </div>
         )}
 
-        <div className="flex flex-col items-center gap-4 w-full mt-auto pt-8 border-t border-gray-100/80">
-          <span className="bg-gradient-to-r from-indigo-50 to-purple-50 text-indigo-700 px-8 py-3 rounded-full text-base font-bold tracking-widest uppercase shadow-sm border border-indigo-100/50">
+        <div className="mt-auto flex w-full flex-col items-center gap-4 border-t border-gray-100/80 pt-8">
+          <span className="rounded-full border border-indigo-100/50 bg-gradient-to-r from-indigo-50 to-purple-50 px-8 py-3 text-base font-bold tracking-widest text-indigo-700 uppercase shadow-sm">
             {role}
           </span>
-          <span className="text-gray-400 text-base font-medium">
+          <span className="text-base font-medium text-gray-400">
             Created {new Date(room.createdAt).toLocaleDateString()}
           </span>
         </div>

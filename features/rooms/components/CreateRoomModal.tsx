@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import toast from "react-hot-toast";
+import { useState } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createRoomSchema, CreateRoomFormValues } from "../validations";
@@ -49,6 +51,7 @@ export function CreateRoomModal({
       );
       reset();
       onSuccess(newRoom as Room);
+      toast.success('Room created successfully', { action: { label: '✖', onClick: (t) => toast.dismiss(t.id) } });
       onClose();
     } catch (err: any) {
       console.error("Failed to create room:", err);
