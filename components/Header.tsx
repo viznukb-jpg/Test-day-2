@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 import { useAuth } from "@/features/auth/AuthContext";
+import UserProfile from "./UserProfile";
 import { auth } from "@/lib/firebase";
 import { signOut } from "firebase/auth";
 
@@ -64,9 +65,12 @@ export default function Header() {
 
         <div className={styles.rightSection}>
           {!loading && user ? (
-            <button onClick={handleLogout} className={styles.logoutButton}>
-              Logout
-            </button>
+            <div className="flex items-center gap-6">
+              <UserProfile displayName={user.displayName} email={user.email} />
+              <button onClick={handleLogout} className={styles.logoutButton}>
+                Logout
+              </button>
+            </div>
           ) : (
             <>
               <Link href="/login" className={styles.loginLink}>
