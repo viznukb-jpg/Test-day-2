@@ -11,7 +11,10 @@ import { formStyles } from "@/components/ui/formStyles";
 import { Input } from "@/components/ui/Input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { registerSchema, RegisterFormValues } from "@/features/auth/validations";
+import {
+  registerSchema,
+  RegisterFormValues,
+} from "@/features/auth/validations";
 
 export default function RegisterPage() {
   const [firebaseError, setFirebaseError] = useState("");
@@ -28,22 +31,27 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormValues) => {
     setFirebaseError("");
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
-      
-      // Update the user's profile with their name immediately after creation!
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
+
       await updateProfile(userCredential.user, {
         displayName: data.name,
       });
 
       router.push("/rooms");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const firebaseErr = err as { code?: string };
       console.error("Register failed", err);
-      if (err.code === "auth/email-already-in-use") {
-        setFirebaseError("Користувач з такою поштою вже існує!");
-      } else if (err.code === "auth/weak-password") {
-        setFirebaseError("Пароль надто слабкий. Мінімум 6 символів.");
+
+      if (firebaseErr.code === "auth/email-already-in-use") {
+        setFirebaseError("User with this email already exists!");
+      } else if (firebaseErr.code === "auth/weak-password") {
+        setFirebaseError("Password is too weak. Minimum 6 characters.");
       } else {
-        setFirebaseError("Помилка реєстрації. Спробуйте ще раз.");
+        setFirebaseError("Registration failed. Please try again.");
       }
     }
   };
@@ -55,7 +63,7 @@ export default function RegisterPage() {
         <p className={styles.subtitle}>Join us to book your meeting spaces</p>
 
         {firebaseError && (
-          <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-lg text-center">
+          <div className="mb-6 rounded-xl border border-red-100 bg-red-50 p-4 text-center text-lg text-red-600">
             {firebaseError}
           </div>
         )}
@@ -88,7 +96,11 @@ export default function RegisterPage() {
             {...register("password")}
           />
 
-          <button type="submit" disabled={isSubmitting} className={formStyles.button}>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={formStyles.button}
+          >
             {isSubmitting ? "Signing up..." : "Sign up"}
           </button>
         </form>

@@ -29,20 +29,21 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       router.push("/rooms");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const firebaseErr = err as { code?: string };
       console.error("Login failed", err);
       if (
-        err.code === "auth/user-not-found" ||
-        err.code === "auth/invalid-email"
+        firebaseErr.code === "auth/user-not-found" ||
+        firebaseErr.code === "auth/invalid-email"
       ) {
-        setFirebaseError("Користувача з такою поштою не знайдено!");
+        setFirebaseError("User with this email not found!");
       } else if (
-        err.code === "auth/wrong-password" ||
-        err.code === "auth/invalid-credential"
+        firebaseErr.code === "auth/wrong-password" ||
+        firebaseErr.code === "auth/invalid-credential"
       ) {
-        setFirebaseError("Невірний пароль або пошта. Перевірте введені дані.");
+        setFirebaseError("Invalid email or password. Please check your credentials.");
       } else {
-        setFirebaseError("Помилка входу. Будь ласка, спробуйте ще раз.");
+        setFirebaseError("Login failed. Please try again.");
       }
     }
   };
@@ -70,12 +71,12 @@ export default function LoginPage() {
           />
 
           <div className="relative">
-            <Link
+            {/* <Link
               href="#"
               className="absolute top-0 right-0 text-lg font-medium text-indigo-600 transition-colors hover:text-indigo-500"
             >
               Forgot password?
-            </Link>
+            </Link> */}
             <Input
               id="password"
               type="password"

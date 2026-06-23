@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/features/auth/AuthContext";
 import { CreateRoomModal } from "@/features/rooms/components/CreateRoomModal";
-import { getUserRooms, deleteRoom } from "@/features/rooms/roomService";
+import { deleteRoom } from "@/features/rooms/roomService";
 import { Room } from "@/features/rooms/types";
+import { useRooms } from "@/hooks/useRooms";
 
 import { Spinner } from "@/components/ui/Spinner";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -16,43 +17,15 @@ import { DeleteRoomModal } from "@/features/rooms/components/DeleteRoomModal";
 export default function RoomsPage() {
   const { user, loading: authLoading } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rooms, setRooms] = useState<Room[]>([]);
-  const [isLoadingRooms, setIsLoadingRooms] = useState(true);
-
   const [roomToDelete, setRoomToDelete] = useState<Room | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchRooms = async (showLoading = false) => {
-      if (!user?.email) return;
-      if (showLoading) setIsLoadingRooms(true);
-      try {
-        const data = await getUserRooms(user.email);
-        if (isMounted) setRooms(data);
-      } catch (err) {
-        console.error("Failed to fetch rooms:", err);
-      } finally {
-        if (isMounted && showLoading) setIsLoadingRooms(false);
-      }
-    };
-
-    if (user?.email) {
-      fetchRooms(true);
-      const intervalId = setInterval(() => fetchRooms(false), 5000);
-      return () => {
-        isMounted = false;
-        clearInterval(intervalId);
-      };
-    }
-  }, [user]);
+  const { rooms, loading: isLoadingRooms } = useRooms(user?.email);
 
   const handleDeleteConfirm = async () => {
     if (!roomToDelete?.id) return;
     setIsDeleting(true);
     try {
       await deleteRoom(roomToDelete.id);
-      setRooms((prev) => prev.filter((r) => r.id !== roomToDelete.id));
       setRoomToDelete(null);
     } catch (error) {
       console.error("Failed to delete room:", error);
@@ -101,7 +74,7 @@ export default function RoomsPage() {
       <CreateRoomModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onSuccess={(newRoom) => setRooms((prev) => [newRoom, ...prev])}
+        onSuccess={() => {}}
       />
 
       <DeleteRoomModal
